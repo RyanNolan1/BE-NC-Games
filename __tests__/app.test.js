@@ -11,6 +11,8 @@ beforeEach(() => {
   return seed(testData);
 });
 
+afterAll(()=>{ return db.end()})
+
 describe("/api/categories", () => {
   test("GET 200 - responds with an array of category objects", () => {
     return request(app)
