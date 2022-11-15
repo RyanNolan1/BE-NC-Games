@@ -17,8 +17,14 @@ describe("/api/categories", () => {
       .get("/api/categories")
       .expect(200)
       .then((res) => {
-        const { categories } = res.body;
-        expect(categories).toBeInstanceOf(Array);
+        const result = res.body.categories;
+        expect(result.length).toBeGreaterThan(0);
+        result.forEach((category) => {
+          expect(category).toMatchObject({
+            slug: expect.any(String),
+            description: expect.any(String),
+          });
+        });
       });
   });
 });
