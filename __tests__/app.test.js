@@ -17,8 +17,8 @@ describe("/api/categories", () => {
       .get("/api/categories")
       .expect(200)
       .then((res) => {
-        const { games } = res.body;
-        expect(games).toBeInstanceOf(Array);
+        const { categories } = res.body;
+        expect(categories).toBeInstanceOf(Array);
       });
   });
 });
