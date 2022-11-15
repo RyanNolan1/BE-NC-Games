@@ -11,7 +11,9 @@ beforeEach(() => {
   return seed(testData);
 });
 
-afterAll(()=>{ return db.end()})
+afterAll(() => {
+  return db.end();
+});
 
 describe("/api/categories", () => {
   test("GET 200 - responds with an array of category objects", () => {
@@ -32,10 +34,10 @@ describe("/api/categories", () => {
 
   test("GET: 404 - responds with an error if path doesn't exist", () => {
     return request(app)
-    .get("/api/sausage")
-    .expect(404)
-    .then((res) => {
-      expect(res.body.msg).toBe('Bad Request!')
-    });
+      .get("/api/sausage")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
   });
 });
