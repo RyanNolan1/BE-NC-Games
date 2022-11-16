@@ -40,4 +40,41 @@ describe("/api/categories", () => {
         expect(res.body.msg).toBe("Bad Request!");
       });
   });
+
+  describe("/api/reviews", () => {
+    test("GET: 200 - responds with an array of reviews objects", () => {
+      return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then((res) => {
+          const result = res.body.reviews;
+          expect(result.length).toBeGreaterThan(0);
+          result.forEach((review) => {
+            expect(review).toMatchObject({
+              owner: expect.any(String),
+              title: expect.any(String),
+              review_id: expect.any(Number),
+              category: expect.any(String),
+              review_img_url: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              designer: expect.any(String),
+              comment_count: expect.any(Number),
+            });
+          });
+        });
+    });
+  });
+
+  test("GET: 200 - responds with an array of objects sorted in descending order by created date", () => {
+    return request(app)
+    .get("/api/reviews")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.reviews).toBeSorted({
+        key: "created_at",
+        descending:true,
+      })
+    })
+  })
 });
