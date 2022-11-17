@@ -125,7 +125,6 @@ describe("/api/reviews/:review_id/comments", () => {
       .get("/api/reviews/2/comments")
       .expect(200)
       .then((res) => {
-        console.log(res.body);
         const result = res.body.review;
         expect(result.length).toBeGreaterThan(0);
         result.forEach((comment) => {
@@ -137,6 +136,18 @@ describe("/api/reviews/:review_id/comments", () => {
             body: expect.any(String),
             review_id: 2,
           });
+        });
+      });
+  });
+
+  test("GET: 200 - responds with an array of comment objects sorted in descending order by created date", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review).toBeSorted({
+          key: "created_at",
+          descending: true,
         });
       });
   });
