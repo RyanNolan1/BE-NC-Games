@@ -68,13 +68,53 @@ describe("/api/categories", () => {
 
   test("GET: 200 - responds with an array of objects sorted in descending order by created date", () => {
     return request(app)
-    .get("/api/reviews")
-    .expect(200)
-    .then(({ body }) => {
-      expect(body.reviews).toBeSorted({
-        key: "created_at",
-        descending:true,
-      })
-    })
-  })
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeSorted({
+          key: "created_at",
+          descending: true,
+        });
+      });
+  });
+});
+
+describe("/api/reviews/:review_id", () => {
+  test("GET: 200 - responds with an object matching given review_id", () => {
+    return request(app)
+      .get("/api/reviews/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review).toEqual({
+          review_id: 1,
+          title: "Agricola",
+          review_body: "Farmyard fun!",
+          designer: "Uwe Rosenberg",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          votes: 1,
+          category: "euro game",
+          owner: "mallionaire",
+          created_at: "2021-01-18T10:00:20.514Z",
+        });
+      });
+  });
+
+  test("GET: 404 - responds with an error when the request is valid but doesn't exist", () => {
+    return request(app)
+      .get("/api/reviews/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Review doesn't exist!");
+      });
+  });
+
+  test("GET: 400 - responds with an error message if an invalid ID (wrong data type) is entered", () => {
+    return request(app)
+      .get("/api/reviews/sausage")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
+  });
 });
