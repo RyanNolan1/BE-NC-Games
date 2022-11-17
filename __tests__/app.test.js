@@ -118,3 +118,26 @@ describe("/api/reviews/:review_id", () => {
       });
   });
 });
+
+describe("/api/reviews/:review_id/comments", () => {
+  test("GET 200 - responds with an array of comments by review_id", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then((res) => {
+        console.log(res.body);
+        const result = res.body.review;
+        expect(result.length).toBeGreaterThan(0);
+        result.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            review_id: 2,
+          });
+        });
+      });
+  });
+});
