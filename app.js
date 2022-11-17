@@ -4,11 +4,15 @@ const { getCategories } = require("./controllers/categories.controller");
 
 const { getReviews } = require("./controllers/reviews.controller");
 
+const { getReviewById } = require("./controllers/review-id.controller");
+
 const app = express();
 
 app.get("/api/categories", getCategories);
 
 app.get("/api/reviews", getReviews);
+
+app.get("/api/reviews/:review_id", getReviewById);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Bad Request!" });
