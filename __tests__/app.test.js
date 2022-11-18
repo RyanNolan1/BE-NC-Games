@@ -161,12 +161,21 @@ describe("/api/reviews/:review_id/comments", () => {
       });
   });
 
+  test("GET: 404 - valid but non-existent review_id", () => {
+    return request(app)
+      .get("/api/reviews/9999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Review not found!");
+      });
+  });
+
   test("GET: 200 - returns an empty array if article exists but doesn't contain any comments", () => {
     return request(app)
       .get("/api/reviews/1/comments")
       .expect(200)
-      .then((res) => {
-        expect(res.body.msg).toEqual([]);
+      .then(({ body }) => {
+        expect(body.review).toEqual([]);
       });
   });
 });
