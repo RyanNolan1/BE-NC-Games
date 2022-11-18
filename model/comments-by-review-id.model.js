@@ -9,8 +9,8 @@ exports.selectReviewCommentsById = (review_id) => {
     .then((res) => {
       if (res.rows.length === 0) {
         return Promise.reject({
-          status: 404,
-          msg: "Review doesn't have any comments!",
+          status: 200,
+          msg: [],
         });
       }
       return res.rows;
