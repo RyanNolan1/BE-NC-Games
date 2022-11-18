@@ -161,7 +161,7 @@ describe("/api/reviews/:review_id/comments", () => {
       });
   });
 
-  test("GET: 200 - returns an error message if article exists but doesn't contain any comments", () => {
+  test("GET: 200 - returns an empty array if article exists but doesn't contain any comments", () => {
     return request(app)
       .get("/api/reviews/1/comments")
       .expect(200)
