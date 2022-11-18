@@ -151,4 +151,22 @@ describe("/api/reviews/:review_id/comments", () => {
         });
       });
   });
+
+  test("GET: 400 - responds with an error message if an invalid ID (wrong data type) is entered", () => {
+    return request(app)
+      .get("/api/reviews/sausage/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
+  });
+
+  test("GET: 404 - returns an error message if article exists but doesn't contain any comments", () => {
+    return request(app)
+      .get("/api/reviews/1/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Review doesn't have any comments!");
+      });
+  });
 });
