@@ -238,19 +238,3 @@ describe("/api/reviews/:review_id/comments", () => {
   });
 });
 
-describe("/api/reviews/:review_id/comments", () => {
-  test("POST - 201: add the new comment to the database & responds with an object containing the new comment", () => {
-    return request(app)
-      .post("/api/reviews/1/comments")
-      .send({
-        username: "Dave",
-        body: "sausage".expect(201).then((res) => {
-          expect(res.body);
-
-          const expected = {
-            comment: {},
-          };
-        }),
-      });
-  });
-});
