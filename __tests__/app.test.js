@@ -34,7 +34,7 @@ describe("/api/categories", () => {
 
   test("GET: 404 - responds with an error if path doesn't exist", () => {
     return request(app)
-      .get("/api/sausage")
+      .get("/api/nonsense")
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("Bad Request!");
@@ -111,10 +111,10 @@ describe("/api/reviews/:review_id", () => {
 
   test("GET: 400 - responds with an error message if an invalid ID (wrong data type) is entered", () => {
     return request(app)
-      .get("/api/reviews/sausage")
+      .get("/api/reviews/nonsense")
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Bad Request!");
+        expect(res.body.msg).toBe("Invalid Request!");
       });
   });
 });
@@ -154,10 +154,10 @@ describe("/api/reviews/:review_id/comments", () => {
 
   test("GET: 400 - responds with an error message if an invalid ID (wrong data type) is entered", () => {
     return request(app)
-      .get("/api/reviews/sausage/comments")
+      .get("/api/reviews/nonsense/comments")
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Bad Request!");
+        expect(res.body.msg).toBe("Invalid Request!");
       });
   });
 
@@ -178,4 +178,63 @@ describe("/api/reviews/:review_id/comments", () => {
         expect(body.review).toEqual([]);
       });
   });
+
+
+  test("POST - 201: adds the new comment to the database and responds with an object containing the new comment", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "philippaclaire9", body: "northcoders" })
+      .expect(201)
+      .then((res) => {
+        expect(res.body.comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: 0,
+          created_at: expect.any(String),
+          author: "philippaclaire9",
+          body: "northcoders",
+          review_id: 2,
+        });
+      });
+  });
+
+  test("POST - 404: test for an ID that doesn't exist", () => {
+    return request(app)
+      .post("/api/reviews/9999/comments")
+      .send({ username: "philippaclaire9", body: "northcoders" })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
+  });
+
+  test("POST - 400: test for an ID that is an invalid data type", () => {
+    return request(app)
+      .post("/api/reviews/nonsense/comments")
+      .send({ username: "philippaclaire9", body: "northcoders" })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid Request!");
+      });
+  });
+
+  test("POST - 400: test that a 400 error is returned when an object has missing information", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({})
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Information Missing!");
+      });
+  });
+
+  test("POST - 404: Error is returned is when a comment is sent with a username that doesn't already exist", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "Dave", body: "I love it!" })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
+  });
 });
+
