@@ -12,6 +12,8 @@ const {
 
 const { postComment } = require("./controllers/post-comment.controller");
 
+const { patchVoteById } = require("./controllers/patch-votes.controller");
+
 const app = express();
 
 app.use(express.json());
@@ -25,6 +27,8 @@ app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
 
 app.post("/api/reviews/:review_id/comments", postComment);
+
+app.patch("/api/reviews/:review_id", patchVoteById);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Bad Request!" });
