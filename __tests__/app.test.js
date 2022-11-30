@@ -179,7 +179,6 @@ describe("/api/reviews/:review_id/comments", () => {
       });
   });
 
-
   test("POST - 201: adds the new comment to the database and responds with an object containing the new comment", () => {
     return request(app)
       .post("/api/reviews/2/comments")
@@ -238,3 +237,30 @@ describe("/api/reviews/:review_id/comments", () => {
   });
 });
 
+describe("/api/users", () => {
+  test("GET 200 - responds with an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        const result = res.body.users;
+        expect(result.length).toBeGreaterThan(0);
+        result.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+
+  test("GET: 404 - responds with an error if path doesn't exist", () => {
+    return request(app)
+      .get("/api/nonsense")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
+  });
+});
