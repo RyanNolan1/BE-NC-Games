@@ -341,17 +341,15 @@ describe("/api/users", () => {
             name: expect.any(String),
             avatar_url: expect.any(String),
           });
-
-          test("GET: 404 - responds with an error if path doesn't exist", () => {
-            return request(app)
-              .get("/api/nonsense")
-              .expect(404)
-              .then((res) => {
-                expect(res.body.msg).toBe("Bad Request!");
-              });
-            });
-          });
         });
-    });
+      });
+  });
+  test("GET: 404 - responds with an error if path doesn't exist", () => {
+    return request(app)
+      .get("/api/nonsense")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request!");
+      });
   });
 });
