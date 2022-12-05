@@ -8,6 +8,8 @@ const { getReviews } = require("./controllers/reviews.controller");
 
 const { getReviewById } = require("./controllers/review-id.controller");
 
+const { getUsers } = require("./controllers/users.controller");
+
 const {
   getCommentsByReviewId,
 } = require("./controllers/comments-by-review-id.controller");
@@ -27,6 +29,8 @@ app.use(express.json());
 app.get("/api/categories", getCategories);
 
 app.get("/api/reviews", getReviews);
+
+app.get("/api/users", getUsers);
 
 app.get("/api/reviews/:review_id", getReviewById);
 
