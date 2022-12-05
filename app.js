@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require('cors');
-app.use(cors());
 
 const { getCategories } = require("./controllers/categories.controller");
 
@@ -19,6 +18,7 @@ const { postComment } = require("./controllers/post-comment.controller");
 const { patchVoteById } = require("./controllers/patch-votes.controller");
 
 const app = express();
+app.use(cors());
 
 app.get('/api/health', (req, res) => {
   res.status(200).send({ msg: 'server up and running'});
