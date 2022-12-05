@@ -256,11 +256,10 @@ describe("/api/reviews/:review_id", () => {
           category: "dexterity",
           owner: "philippaclaire9",
           created_at: "2021-01-18T10:01:41.251Z",
-          
         });
       });
   });
-        
+
   test("PATCH - 200: responds with the updated review when the votes value is a minus", () => {
     const testVotes = { inc_votes: -100 };
     return request(app)
@@ -326,8 +325,9 @@ describe("/api/reviews/:review_id", () => {
         expect(body.msg).toEqual("Invalid Request!");
       });
   });
-  
-  describe("/api/users", () => {
+});
+
+describe("/api/users", () => {
   test("GET 200 - responds with an array of user objects", () => {
     return request(app)
       .get("/api/users")
@@ -341,11 +341,16 @@ describe("/api/reviews/:review_id", () => {
             name: expect.any(String),
             avatar_url: expect.any(String),
           });
-          
-     test("GET: 404 - responds with an error if path doesn't exist", () => {
-    return request(app)
-      .get("/api/nonsense")
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("Bad Request!");
+
+          test("GET: 404 - responds with an error if path doesn't exist", () => {
+            return request(app)
+              .get("/api/nonsense")
+              .expect(404)
+              .then((res) => {
+                expect(res.body.msg).toBe("Bad Request!");
+              });
+          });
+        });
+      });
+  });
 });
