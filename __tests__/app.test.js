@@ -349,8 +349,9 @@ describe("/api/users", () => {
               .then((res) => {
                 expect(res.body.msg).toBe("Bad Request!");
               });
+            });
           });
         });
-      });
+    });
   });
 });
