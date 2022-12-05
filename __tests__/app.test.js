@@ -237,7 +237,97 @@ describe("/api/reviews/:review_id/comments", () => {
   });
 });
 
-describe("/api/users", () => {
+describe("/api/reviews/:review_id", () => {
+  test("PATCH - 200: responds with the updated review", () => {
+    const testVotes = { inc_votes: 5 };
+    return request(app)
+      .patch("/api/reviews/2")
+      .send(testVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review).toEqual({
+          review_id: 2,
+          title: "Jenga",
+          review_body: "Fiddly fun for all the family",
+          designer: "Leslie Scott",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          votes: 10,
+          category: "dexterity",
+          owner: "philippaclaire9",
+          created_at: "2021-01-18T10:01:41.251Z",
+          
+        });
+      });
+  });
+        
+  test("PATCH - 200: responds with the updated review when the votes value is a minus", () => {
+    const testVotes = { inc_votes: -100 };
+    return request(app)
+      .patch("/api/reviews/2")
+      .send(testVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review).toEqual({
+          review_id: 2,
+          title: "Jenga",
+          review_body: "Fiddly fun for all the family",
+          designer: "Leslie Scott",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          votes: -95,
+          category: "dexterity",
+          owner: "philippaclaire9",
+          created_at: "2021-01-18T10:01:41.251Z",
+        });
+      });
+  });
+
+  test("PATCH - 404: returns an error message when trying to patch an review that doesn't exist", () => {
+    const testVotes = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/reviews/84884")
+      .send(testVotes)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Review doesn't exist!");
+      });
+  });
+
+  test("PATCH - 400: returns an error message when trying to patch an review that doesn't exist", () => {
+    const testVotes = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/reviews/nonsense")
+      .send(testVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid Request!");
+      });
+  });
+
+  test("PATCH - 400: returns an error message when trying to patch a review without any vote value", () => {
+    const testVotes = {};
+    return request(app)
+      .patch("/api/reviews/nonsense")
+      .send(testVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid Request!");
+      });
+  });
+
+  test("PATCH - 404: returns an error message when trying to patch a review with a vote that isn't valid", () => {
+    const testVotes = { inc_votes: "nonsense" };
+    return request(app)
+      .patch("/api/reviews/2")
+      .send(testVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid Request!");
+      });
+  });
+  
+  describe("/api/users", () => {
   test("GET 200 - responds with an array of user objects", () => {
     return request(app)
       .get("/api/users")
@@ -251,16 +341,11 @@ describe("/api/users", () => {
             name: expect.any(String),
             avatar_url: expect.any(String),
           });
-        });
-      });
-  });
-
-  test("GET: 404 - responds with an error if path doesn't exist", () => {
+          
+     test("GET: 404 - responds with an error if path doesn't exist", () => {
     return request(app)
       .get("/api/nonsense")
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("Bad Request!");
-      });
-  });
 });
